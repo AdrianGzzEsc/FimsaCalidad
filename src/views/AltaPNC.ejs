@@ -11,15 +11,10 @@
                         <form>
                             <div class="form-group row justify-content-between">
                                 <div class="col-sm-5">
-                                    <label for="proceso">Proceso del defecto:</label>
-                                    <select id="proceso" class="form-control" name="Proceso" placeholder="Proceso">
-                                        <option value="" disabled selected hidden>Seleccionar proceso</option>
-                                        <% for (var i =0; i < oper.length; i++)  {     %>
-                                        <option value="<%=oper[i].nombre %>"> <%= oper[i].nombre %></option>
-                                        <%  }  %>
-                                    </select>
+                                    <label for="folio">Folio:</label>
+                                    <input class="form-control" type="text" name="Folio" placeholder="Folio" id="folio">
                                 </div>
-                                <div class="col-sm-5" style="max-width: 200px;">
+                                <div class="col-sm-5">
                                     <label for="fechaform">Fecha:</label>
                                     <input class="form-control" type="date" name="Fecha" placeholder="Fecha" id="fechaform">
                                 </div>
@@ -27,8 +22,14 @@
 
                             <div class="form-group row justify-content-between">
                                 <div class="col-sm-5">
-                                    <label for="folio">Folio:</label>
-                                    <input class="form-control" type="text" name="Folio" placeholder="Folio" id="folio">
+                                    <label for="proceso">Proceso del defecto:</label>
+                                    <select id="proceso" class="form-control" name="Proceso" placeholder="Proceso">
+                                        <option value="" disabled selected hidden>Seleccionar proceso</option>
+                                        <% for (var i =0; i < oper.length; i++)  {     %>
+                                        <option value="<%=oper[i].nombre %>"> <%= oper[i].nombre %></option>
+                                        <%  }  %>
+                                    </select>
+
                                     <label for="orden">No. orden:</label>
                                     <input class="form-control" type="text" name="Orden" placeholder="Orden de Producción" id="orden">
                                 </div>
@@ -114,23 +115,23 @@
         });
     </script>
     <script>
-        let sel = document.getElementById( 'proceso' );
+        let sel = document.getElementById('proceso');
         let select = document.getElementById('seleccion');
-        sel.addEventListener( 'change', ( event ) => {
+        sel.addEventListener('change', (event) => {
             event.preventDefault();
             $(".selectpicker").selectpicker();
             var array = [];
-            for(let i = 0; i < document.getElementsByClassName(sel.value).length; i++) {
+            for (let i = 0; i < document.getElementsByClassName(sel.value).length; i++) {
                 let outerHTML = document.getElementsByClassName(sel.value)[i].outerHTML;
                 var strDef = outerHTML.search(">");
                 var strDef2 = outerHTML.search("/");
-                var defecto = outerHTML.substring(strDef+1, strDef2-1);
+                var defecto = outerHTML.substring(strDef + 1, strDef2 - 1);
                 array.push(defecto);
             }
             console.log(select.innerHTML);
             console.log("change.");
             select.innerHTML = ``;
-            for( let i = 0; i < array.length; i++ ) {
+            for (let i = 0; i < array.length; i++) {
                 let opt = document.createElement('option');
                 opt.value = array[i];
                 opt.innerText = array[i];
@@ -140,7 +141,8 @@
             console.log(select);
         })
     </script>
-</body>
-<script src="../../js/home.js"></script>
-<script src="../../js/altaPNC.js"></script>
-</html>
+    </body>
+    <script src="../../js/home.js"></script>
+    <script src="../../js/altaPNC.js"></script>
+
+    </html>

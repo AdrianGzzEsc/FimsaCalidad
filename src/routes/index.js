@@ -43,6 +43,10 @@ router.get('/inicio/', (req, res) => {
     res.render('Inicio');
 });
 
+router.get('/graficas/', (req, res) => {
+    res.render('Graficas');
+});
+
 router.get('/super/', (req, res) => {
     res.render('Super');
 });
@@ -76,6 +80,16 @@ router.get('/agregarUsuario/', async(req, res) => {;
 router.get('/agregarDefecto/', async(req, res) => {;
     const tasks = await defectos.find();
     res.render('AgregarDefecto', { tasks });
+});
+
+router.get('/agregarProducto/', async(req, res) => {;
+    const tasks = await productos.find();
+    res.render('AgregarProducto', { tasks });
+});
+
+router.get('/agregarDepartamento/', async(req, res) => {;
+    const tasks = await departamentos.find();
+    res.render('AgregarDepartamento', { tasks });
 });
 
 router.get('/agregarMaterial/', async(req, res) => {;
@@ -429,6 +443,18 @@ router.post('/addPieza', async(req, res) => {
     res.redirect('/agregarPieza/');
 });
 
+router.post('/addProducto', async(req, res) => {
+    const producto = new productos(req.body);
+    await producto.save();
+    res.redirect('/agregarProducto/');
+});
+
+router.post('/addDepartamento', async(req, res) => {
+    const departamento = new departamentos(req.body);
+    await departamento.save();
+    res.redirect('/agregarDepartamento/');
+});
+
 router.post('/addDefectoOperacion', async(req, res) => {
     const defectoOp = new defectoOperaciones(req.body);
     await defectoOp.save();
@@ -439,41 +465,41 @@ router.post('/addRecepcion/', jsonParser, function(req, res) {
     /*const recepcion = new inspeccion_de_rec(req.body);
     await recepcion.save();
     res.redirect('/inicio/');*/
-    let {folio, fecha, inspector, entrada, OC, Doc_Pro, Proveedor, Material, Cantidad, Unidad, Inspeccion } = req.body;
+    let { folio, fecha, inspector, entrada, OC, Doc_Pro, Proveedor, Material, Cantidad, Unidad, Inspeccion } = req.body;
 
     /*if( !folio || !fecha || !inspector || !entrada || !OC || !Doc_Pro || !Proveedor || !Material || !Cantidad || !Unidad || !Inspeccion ) {
         res.statusMessage = "Hay uno o varios campos faltantes.";
         return res.status( 406 ).end();
     }*/
 
-    if( !folio || !fecha || !inspector || !entrada || !OC || !Doc_Pro || !Proveedor || !Material || !Cantidad || !Unidad || !Inspeccion ) {
+    if (!folio || !fecha || !inspector || !entrada || !OC || !Doc_Pro || !Proveedor || !Material || !Cantidad || !Unidad || !Inspeccion) {
         res.statusMessage = "Falta uno o más campos por llenar.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( folio ) ){
+    if (isNaN(folio)) {
         res.statusMessage = "El 'folio' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( entrada ) ){
+    if (isNaN(entrada)) {
         res.statusMessage = "La 'entrada' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( OC ) ){
+    if (isNaN(OC)) {
         res.statusMessage = "El 'OC' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( Doc_Pro ) ){
+    if (isNaN(Doc_Pro)) {
         res.statusMessage = "El 'Doc_Pro' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( Cantidad ) ){
+    if (isNaN(Cantidad)) {
         res.statusMessage = "La 'Cantidad' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
     let newInsp = {
@@ -491,15 +517,15 @@ router.post('/addRecepcion/', jsonParser, function(req, res) {
     }
 
     inspeccion_de_rec
-        .createInsp( newInsp )
-        .then( result => {
-            if( result.errmsg )
-                return res.status( 400 ).end();
-            return res.status( 201 ).json( result );
+        .createInsp(newInsp)
+        .then(result => {
+            if (result.errmsg)
+                return res.status(400).end();
+            return res.status(201).json(result);
         })
-        .catch( err => {
+        .catch(err => {
             res.statusMessage = "Something went wrong with the Database.";
-            return res.status( 500 ).end();
+            return res.status(500).end();
         })
 });
 
@@ -509,14 +535,14 @@ router.post('/addAltaPnc/', async(req, res) => {
     res.redirect('/inicio/');*/
     let { folio, Fecha, Orden, Proceso, Modelo, Defectos, Cantidad, Comentarios, Retrabajo, inspector } = req.body;
 
-    if( !folio || !Fecha || !Orden || !Proceso || !Modelo || !Defectos || !Cantidad || !Comentarios || !Retrabajo || !inspector ) {
+    if (!folio || !Fecha || !Orden || !Proceso || !Modelo || !Defectos || !Cantidad || !Comentarios || !Retrabajo || !inspector) {
         res.statusMessage = "Falta de llenar uno o más campos.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
-    if( isNaN( Cantidad ) ) {
+    if (isNaN(Cantidad)) {
         res.statusMessage = "La 'Cantidad' debe ser un numero.";
-        return res.status( 406 ).end();
+        return res.status(406).end();
     }
 
     let newAlta = {
@@ -525,7 +551,7 @@ router.post('/addAltaPnc/', async(req, res) => {
         Orden,
         Proceso,
         Modelo,
-        Defectos, 
+        Defectos,
         Cantidad,
         Comentarios,
         Retrabajo,
@@ -533,15 +559,15 @@ router.post('/addAltaPnc/', async(req, res) => {
     }
 
     altaPNC_collection
-        .createAlta( newAlta )
-        .then( result => {
-            if( result.errmsg )
-                return res.status( 400 ).end();
-            return res.status( 201 ).json( result );
+        .createAlta(newAlta)
+        .then(result => {
+            if (result.errmsg)
+                return res.status(400).end();
+            return res.status(201).json(result);
         })
-        .catch( err => {
+        .catch(err => {
             res.statusMessage = "Something went wrong with the Database.";
-            return res.status( 500 ).end();
+            return res.status(500).end();
         })
 });
 
@@ -584,6 +610,7 @@ router.post('/addFinal', async(req, res) => {
 });
 
 router.post('/addEscuadradora/:id', async(req, res) => {
+    console.log("HOLA");
     var id = req.params.id
     await escuadradora.update({ folio: id }, req.body);
     res.redirect('/enchapadora/');
@@ -721,6 +748,18 @@ router.get('/deletePiezaModelo/:id', async(req, res) => {
     var id = req.params.id;
     await piezaModelos.remove({ _id: id });
     res.redirect('/agregarPiezaModelo/');
+});
+
+router.get('/deleteProducto/:id', async(req, res) => {
+    var id = req.params.id;
+    await productos.remove({ _id: id });
+    res.redirect('/agregarProducto/');
+});
+
+router.get('/deleteDepartamento/:id', async(req, res) => {
+    var id = req.params.id;
+    await departamentos.remove({ _id: id });
+    res.redirect('/agregarDepartamento/');
 });
 
 router.get('/deleteAltaPnc/:id', async(req, res) => {
